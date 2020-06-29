@@ -1,69 +1,170 @@
-// Stack
+// Classical inheritance approach
+class ClassStack {
+    constructor() {
+        this.count = 0;
+        this.storage = {};
+    }
 
-/*
-Pseudo Code
-
-Create Stack class/constructor
-    create and set count to 0
-    create sotrage object
-
-Create push method on Stack prototype
-    Add the given value into storage w/ a key of current count
-    Increment count
-
-Create pop method on Stack prototype
-    Check to see if stack is empty
-        if so, return undefined
-    Decrement count
-    Save element at top of stack to a var (to later return)
-    Delete that element from storage
-    Return saved element
-
-Create size method on Stack prototype
-  Return count
-*/
-
-const stackMethods = {
     push(value) {
-        this.storage[this.count] = value;
-        this.count++;
+        let min = value;
+        let max = value;
 
-        return this.storage;
-    },
-    pop(value) {
         if (this.count) {
-            const result = this.storage[this.count];
+            const previousItem = this.storage[this.count - 1];
 
+            min = Math.min(value, previousItem.min);
+            max = Math.max(value, previousItem.max);
+        }
+
+        this.storage[this.count] = { value, min, max };
+        this.count++;
+    }
+
+    pop() {
+        if (this.count) {
             this.count--;
             delete this.storage[this.count];
+        }
+    }
 
-            return result;
+    peek() {
+        if (this.count) {
+            return this.storage[this.count - 1].value;
+        }
+    }
+
+    getMin() {
+        if (this.count) {
+            return this.storage[this.count - 1].min;
+        }
+    }
+
+    getMax() {
+        if (this.count) {
+            return this.storage[this.count - 1].max;
+        }
+    }
+}
+
+const newClassStack = new ClassStack();
+
+
+// Prototypal inheritance approach
+function PrototypalStack() {
+    this.count = 0, 
+    this.storage = {}
+}
+
+PrototypalStack.prototype.push = function(value) {
+    let min = value;
+    let max = value;
+
+    if (this.count) {
+        const previousItem = this.storage[this.count - 1];
+
+        min = Math.min(value, previousItem.min);
+        max = Math.max(value, previousItem.max);
+    }
+
+    this.storage[this.count] = { value, min, max };
+    this.count++;
+}
+PrototypalStack.prototype.pop = function() {
+    if (this.count) {
+        delete this.storage[this.count];
+        this.count--;
+    }
+}
+PrototypalStack.prototype.peek = function() {
+    if (this.count) {
+        console.log(this.storage[this.count - 1]);
+    }
+}
+PrototypalStack.prototype.getMin = function() {
+    if (this.count) {
+        console.log(this.storage[this.count - 1].min);
+    }
+}
+PrototypalStack.prototype.getMax = function() {
+    if (this.count) {
+        console.log(this.storage[this.count - 1].max);
+    }
+}
+
+const newPrototypalStack = new PrototypalStack();
+
+
+// Prototypal inheritance Object.create approach
+const objectCreateStack = {
+    init: {
+        count: { value: 0, writable: true }, 
+        storage: { value: {}, writable: true }
+    },
+    push: function(value) {
+        let min = value;
+        let max = value;
+
+        if (this.count) {
+            const previousItem = this.storage[this.count - 1];
+
+            min = Math.min(value, previousItem.min);
+            max = Math.max(value, previousItem.max);
+        }
+
+        this.storage[this.count] = { value, min, max };
+        this.count++;
+    },
+    pop: function() {
+        if (this.count) {
+            delete this.storage[this.count];
+            this.count--;
         }
     },
-    size() {
-        return this.count;
+    peek: function() {
+        if (this.count) {
+            console.log(this.storage[this.count - 1]);
+        }
     },
-    peek() {},
-    empty() {}
+    getMin: function() {
+        if (this.count) {
+            console.log(this.storage[this.count - 1].min);
+        }
+    },
+    getMax: function() {
+        if (this.count) {
+            console.log(this.storage[this.count - 1].max);
+        }
+    }
 };
 
-const newStack = Object.create(stackMethods, { 
-    count: { value: 0, writable: true }, 
-    storage: { value: {}, writable: true } 
+const newObjectCreateStack = Object.create(objectCreateStack, objectCreateStack.init);
+
+
+// Factory functions approach (composition)
+const factoryStack = ({ count = 0, storage = {} } = {}) => ({
+    push: (value) => {
+        let min = value;
+        let max = value;
+
+        if (count) {
+            const previousItem = storage[count - 1];
+
+            min = Math.min(value, previousItem.min);
+            max = Math.max(value, previousItem.max);
+        }
+
+        storage[count] = { value, min, max };
+        count++;
+    },
+    pop: () => {
+        if (count) {
+            delete storage[count];
+            count--;
+        }
+    },
+    peek: () => (count) && console.log(storage[count - 1]),
+    getMin: () => (count) && console.log(storage[count - 1].min),
+    getMax: () => (count) && console.log(storage[count - 1].max)
 });
 
-console.log(newStack.push('First Thing'));
-console.log(newStack.push('Second Thing'));
-console.log(newStack.size());
-
-
-
-
-
-
-
-
-
-
-
-
+const newFactoryStack = factoryStack();
