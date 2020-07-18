@@ -429,3 +429,5 @@ const factoryLinkedList = ({ head = null, size = 0 } = {}) => ({
 });
 
 const newFactoryLinkedList = factoryLinkedList();
+
+export { factoryLinkedListNode };
