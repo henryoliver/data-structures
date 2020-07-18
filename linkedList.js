@@ -327,9 +327,14 @@ const newObjectCreateLinkedList = Object.create(objectCreateLinkedList, objectCr
 
 
 // Factory functions approach (composition)
+const factoryLinkedListNode = ({ 
+    data = null, 
+    next = null 
+} = {}) => ({ data, next });
+
 const factoryLinkedList = ({ head = null, size = 0 } = {}) => ({
     append: (value = '') => {
-        const node = { data: value, next: null };
+        const node = factoryLinkedListNode({ data: value });
 
         if (head === null) {
             head = node;
@@ -347,14 +352,14 @@ const factoryLinkedList = ({ head = null, size = 0 } = {}) => ({
         size++;
     },
     prepend: (value = '') => {
-        const node = { data: value, next: head };
+        const node = factoryLinkedListNode({ data: value, next: head });
 
         head = node;
         size++;
     },
     insertAt: (value = '', index = 0) => {
         if (index >= 0 && index <= size) {
-            const node = { data: value, next: null };
+            const node = factoryLinkedListNode({ data: value });
 
             if (index === 0) {
                 node.next = head;
