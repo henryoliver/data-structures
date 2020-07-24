@@ -424,10 +424,12 @@ const factoryLinkedList = ({ head = null, size = 0 } = {}) => ({
             }
         }
     },
-    getSize: () => console.log(`The size of this linked list is: ${size}`),
-    printOut: () => console.log(JSON.stringify(head))
+    getHead: () => head,
+    getSize: () => size,
+    printOut: () => {
+        console.log(JSON.stringify(head));
+        console.log(`The size of this linked list is: ${size}`);
+    }
 });
 
-const newFactoryLinkedList = factoryLinkedList();
-
-export { factoryLinkedListNode };
+export { factoryLinkedListNode, factoryLinkedList };

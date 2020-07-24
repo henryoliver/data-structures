@@ -157,14 +157,22 @@ const factoryStack = ({ count = 0, storage = {} } = {}) => ({
         count++;
     },
     pop: () => {
+        let deletedItem;
+
         if (count) {
+            deletedItem = storage[count - 1];
+
             delete storage[count];
             count--;
         }
+
+        return deletedItem;
     },
-    peek: () => (count) && console.log(storage[count - 1]),
-    getMin: () => (count) && console.log(storage[count - 1].min),
-    getMax: () => (count) && console.log(storage[count - 1].max)
+    getSize: () => count,
+    getStack: () => storage,
+    peek: () => storage[count - 1],
+    getMin: () => (count) ? storage[count - 1].min : 0,
+    getMax: () => (count) ? storage[count - 1].max : 0
 });
 
-const newFactoryStack = factoryStack();
+export { factoryStack };
