@@ -18,18 +18,18 @@ class Stack:
 
         return None
 
-    # Procidure 
+    # Procedure 
     # O(1) time | O(1) space
-    def push(self, number):
-        minNumber = number
-        maxNumber = number
+    def push(self, value):
+        minNumber = value
+        maxNumber = value
 
         if (len(self.minMaxStack)):
             lastMinMax = self.minMaxStack[-1]
             minNumber = min(lastMinMax[0], minNumber)
             maxNumber = max(lastMinMax[1], maxNumber)
 
-        self.stack.append(number)
+        self.stack.append(value)
         self.minMaxStack.append((minNumber, maxNumber))
 
         print(self.stack)
@@ -48,5 +48,3 @@ class Stack:
             return self.minMaxStack[-1][1]
 
         return None
-
-NewStack = Stack()
