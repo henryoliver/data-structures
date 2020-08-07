@@ -325,7 +325,6 @@ const objectCreateLinkedList = {
 
 const newObjectCreateLinkedList = Object.create(objectCreateLinkedList, objectCreateLinkedList.init);
 
-
 // Factory functions approach (composition)
 const factoryLinkedListNode = ({ 
     data = null, 

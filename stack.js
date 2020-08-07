@@ -1,3 +1,5 @@
+// Stack LIFO (last-in first-out)
+
 // Classical inheritance approach
 class ClassStack {
     constructor() {
@@ -48,14 +50,12 @@ class ClassStack {
 
 const newClassStack = new ClassStack();
 
-
 // Prototypal inheritance approach
 function PrototypalStack() {
-    this.count = 0, 
-    this.storage = {}
+    (this.count = 0), (this.storage = {});
 }
 
-PrototypalStack.prototype.push = function(value) {
+PrototypalStack.prototype.push = function (value) {
     let min = value;
     let max = value;
 
@@ -68,39 +68,38 @@ PrototypalStack.prototype.push = function(value) {
 
     this.storage[this.count] = { value, min, max };
     this.count++;
-}
-PrototypalStack.prototype.pop = function() {
+};
+PrototypalStack.prototype.pop = function () {
     if (this.count) {
         delete this.storage[this.count];
         this.count--;
     }
-}
-PrototypalStack.prototype.peek = function() {
+};
+PrototypalStack.prototype.peek = function () {
     if (this.count) {
         console.log(this.storage[this.count - 1]);
     }
-}
-PrototypalStack.prototype.getMin = function() {
+};
+PrototypalStack.prototype.getMin = function () {
     if (this.count) {
         console.log(this.storage[this.count - 1].min);
     }
-}
-PrototypalStack.prototype.getMax = function() {
+};
+PrototypalStack.prototype.getMax = function () {
     if (this.count) {
         console.log(this.storage[this.count - 1].max);
     }
-}
+};
 
 const newPrototypalStack = new PrototypalStack();
-
 
 // Prototypal inheritance Object.create approach
 const objectCreateStack = {
     init: {
-        count: { value: 0, writable: true }, 
-        storage: { value: {}, writable: true }
+        count: { value: 0, writable: true },
+        storage: { value: {}, writable: true },
     },
-    push: function(value) {
+    push: function (value) {
         let min = value;
         let max = value;
 
@@ -114,65 +113,64 @@ const objectCreateStack = {
         this.storage[this.count] = { value, min, max };
         this.count++;
     },
-    pop: function() {
+    pop: function () {
         if (this.count) {
             delete this.storage[this.count];
             this.count--;
         }
     },
-    peek: function() {
+    peek: function () {
         if (this.count) {
             console.log(this.storage[this.count - 1]);
         }
     },
-    getMin: function() {
+    getMin: function () {
         if (this.count) {
             console.log(this.storage[this.count - 1].min);
         }
     },
-    getMax: function() {
+    getMax: function () {
         if (this.count) {
             console.log(this.storage[this.count - 1].max);
         }
-    }
+    },
 };
 
 const newObjectCreateStack = Object.create(objectCreateStack, objectCreateStack.init);
 
-
 // Factory functions approach (composition)
-const factoryStack = ({ count = 0, storage = {} } = {}) => ({
-    push: (value) => {
-        let min = value;
-        let max = value;
+const factoryStackNode = ({ data = null, next = null } = {}) => ({ data, next });
 
-        if (count) {
-            const previousItem = storage[count - 1];
+const factoryStack = ({ top = null, size = 0 } = {}) => ({
+    push: (item) => {
+        const node = factoryStackNode({ data: item });
 
-            min = Math.min(value, previousItem.min);
-            max = Math.max(value, previousItem.max);
-        }
+        node.next = top;
+        top = node;
 
-        storage[count] = { value, min, max };
-        count++;
+        size++;
     },
     pop: () => {
-        let deletedItem;
+        if (top === null) { 
+            console.error('Stack is already empty');
+        } else {
+            const item = top.data;
 
-        if (count) {
-            deletedItem = storage[count - 1];
+            top = top.next;
 
-            delete storage[count];
-            count--;
+            size--;
+
+            return item;
         }
-
-        return deletedItem;
     },
-    getSize: () => count,
-    getStack: () => storage,
-    peek: () => storage[count - 1],
-    getMin: () => (count) ? storage[count - 1].min : 0,
-    getMax: () => (count) ? storage[count - 1].max : 0
+    peek: () => {
+        if (top === null) {
+            console.warn('Stack is empty');
+        } else {
+            return top;
+        }
+    },
+    isEmpty: () => size === 0
 });
 
 export { factoryStack };
